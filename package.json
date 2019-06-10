@@ -1,0 +1,19 @@
+{
+  "name": "mexican-rates",
+  "version": "1.0.0",
+  "description": "it's just a graphic of the rates of the Mexican Peso against other currencies.",
+  "main": ".eslintrc.js",
+  "scripts": {
+    "test": "src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nieto1705/mexican-rates.git"
+  },
+  "author": "Jesus Ramirez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nieto1705/mexican-rates/issues"
+  },
+  "homepage": "https://github.com/nieto1705/mexican-rates#readme"
+}
