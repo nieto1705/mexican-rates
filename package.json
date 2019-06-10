@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/nieto1705/mexican-rates#readme",
   "devDependencies": {
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-react": "^7.0.0",
     "babelify": "^10.0.0",
     "browser-sync": "^2.26.7",
     "browserify": "^16.2.3",
