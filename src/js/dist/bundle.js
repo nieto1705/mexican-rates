@@ -47781,7 +47781,7 @@ function (_Component) {
   _createClass(App, [{
     key: "render",
     value: function render() {
-      return _react["default"].createElement("div", null, _react["default"].createElement(_Graph["default"], {
+      return _react["default"].createElement("div", null, _react["default"].createElement("h1", null, "HOLA"), _react["default"].createElement(_Graph["default"], {
         date: "2013-03-16"
       }));
     }
@@ -47845,9 +47845,19 @@ function (_Component) {
       this.chart = _c["default"].generate({
         bindto: this.chartRef,
         data: {
-          columns: [['data1', 30, 200, 100, 400, 150, 250], ['data2', 50, 20, 10, 40, 15, 25]]
+          columns: this.props.rates
         }
       });
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps) {
+      if (JSON.stringify(prevProps.rates) !== JSON.stringify(this.props.rates)) {
+        this.chart.load({
+          columns: this.props.rates,
+          type: 'bar'
+        });
+      }
     }
   }, {
     key: "render",
@@ -47970,8 +47980,8 @@ function withRates(WrappedComponent) {
             return Object.keys(data.rates).map(function (key) {
               return [key, data.rates[key]];
             });
-          })["catch"](function () {
-            return console.log('something went wrong');
+          })["catch"](function (error) {
+            console.log('something went wrong');
           });
         }
       }, {
@@ -48020,7 +48030,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.API_KEY = void 0;
-var API_KEY = 'put your api key here';
+var API_KEY = 'PUT YOUR API KEY HERE';
 exports.API_KEY = API_KEY;
 
 },{}],154:[function(require,module,exports){

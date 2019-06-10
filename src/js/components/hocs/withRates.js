@@ -39,7 +39,9 @@ function withRates(WrappedComponent) {
         .then(({ data }) => {
           return Object.keys(data.rates).map(key => [key, data.rates[key]]);
         })
-        .catch(() => console.log('something went wrong'));
+        .catch(error => {
+          console.log('something went wrong');
+        });
     }
     makeUrl(date, currencies) {
       const currencyList = currencies.reduce(
