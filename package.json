@@ -15,5 +15,31 @@
   "bugs": {
     "url": "https://github.com/nieto1705/mexican-rates/issues"
   },
-  "homepage": "https://github.com/nieto1705/mexican-rates#readme"
+  "homepage": "https://github.com/nieto1705/mexican-rates#readme",
+  "devDependencies": {
+    "babelify": "^10.0.0",
+    "browser-sync": "^2.26.7",
+    "browserify": "^16.2.3",
+    "del": "^4.1.1",
+    "gulp": "^4.0.2",
+    "gulp-uglify": "^3.0.2",
+    "gulplog": "^1.0.0",
+    "vinyl-buffer": "^1.0.1",
+    "vinyl-source-stream": "^2.0.0",
+    "watchify": "^3.11.1"
+  },
+  "dependencies": {
+    "d3": "^5.9.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  },
+  "browser": {
+    "c3": "./src/js/vendor/c3.min.js"
+  },
+  "browserify-shim": {}
 }
