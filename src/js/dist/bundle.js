@@ -48688,8 +48688,6 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _Graph = _interopRequireDefault(require("./components/Graph.js"));
 
-var _DatePicker = _interopRequireDefault(require("./components/DatePicker.js"));
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
@@ -48752,7 +48750,9 @@ function (_Component) {
   _createClass(App, [{
     key: "render",
     value: function render() {
-      return _react["default"].createElement("div", null, _react["default"].createElement("input", {
+      return _react["default"].createElement("div", {
+        className: "content-box"
+      }, _react["default"].createElement("input", {
         type: "date",
         value: this.state.date,
         onChange: this.handleChange
@@ -48767,43 +48767,7 @@ function (_Component) {
 
 exports["default"] = App;
 
-},{"./components/DatePicker.js":156,"./components/Graph.js":157,"react":145}],156:[function(require,module,exports){
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports["default"] = void 0;
-
-var _react = _interopRequireDefault(require("react"));
-
-var _propTypes = _interopRequireDefault(require("prop-types"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-var DatePicker = function DatePicker(_ref) {
-  var value = _ref.value,
-      onChange = _ref.onChange;
-
-  var handleChange = function handleChange(event) {
-    return onChange(event.target.onChange);
-  };
-
-  return _react["default"].createElement("input", {
-    value: value,
-    type: "date",
-    onChange: handleChange
-  });
-};
-
-DatePicker.propTypes = {
-  value: _propTypes["default"].string,
-  onChange: _propTypes["default"].func
-};
-var _default = DatePicker;
-exports["default"] = _default;
-
-},{"prop-types":135,"react":145}],157:[function(require,module,exports){
+},{"./components/Graph.js":156,"react":145}],156:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -48814,6 +48778,8 @@ exports["default"] = void 0;
 var _react = _interopRequireWildcard(require("react"));
 
 var _withRates = _interopRequireDefault(require("./hocs/withRates.js"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _c = _interopRequireDefault(require("c3"));
 
@@ -48841,9 +48807,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -48854,15 +48820,42 @@ var Graph =
 function (_Component) {
   _inherits(Graph, _Component);
 
-  function Graph() {
+  function Graph(props) {
+    var _this;
+
     _classCallCheck(this, Graph);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(Graph).apply(this, arguments));
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Graph).call(this, props)); //binds
+
+    _this.initChart = _this.initChart.bind(_assertThisInitialized(_this));
+    return _this;
   }
 
   _createClass(Graph, [{
     key: "componentDidMount",
     value: function componentDidMount() {
+      /// solo se creara la grafica una vez que todo este cargado
+      if (!this.props.loading) {
+        this.initChart();
+      }
+    }
+  }, {
+    key: "componentDidUpdate",
+    value: function componentDidUpdate(prevProps) {
+      if (JSON.stringify(prevProps.rates) !== JSON.stringify(this.props.rates)) {
+        if (!this.chart) {
+          this.initChart();
+        } else {
+          this.chart.load({
+            columns: [['x', this.props.base]].concat(_toConsumableArray(this.props.rates)),
+            type: 'bar'
+          });
+        }
+      }
+    }
+  }, {
+    key: "initChart",
+    value: function initChart() {
       this.chart = _c["default"].generate({
         bindto: this.chartRef,
         data: {
@@ -48875,30 +48868,20 @@ function (_Component) {
           },
           y: {
             tick: {
-              format: d3.format("$")
+              format: d3.format('$')
             }
           }
         }
       });
     }
   }, {
-    key: "componentDidUpdate",
-    value: function componentDidUpdate(prevProps) {
-      if (JSON.stringify(prevProps.rates) !== JSON.stringify(this.props.rates)) {
-        this.chart.load({
-          columns: [['x', this.props.base]].concat(_toConsumableArray(this.props.rates)),
-          type: 'bar'
-        });
-      }
-    }
-  }, {
     key: "render",
     value: function render() {
-      var _this = this;
+      var _this2 = this;
 
       return _react["default"].createElement("div", {
         ref: function ref(_ref) {
-          return _this.chartRef = _ref;
+          return _this2.chartRef = _ref;
         }
       });
     }
@@ -48910,8 +48893,14 @@ function (_Component) {
 var _default = (0, _withRates["default"])(Graph);
 
 exports["default"] = _default;
+Graph.propTypes = {
+  base: _propTypes["default"].string,
+  rates: _propTypes["default"].array,
+  loading: _propTypes["default"].bool,
+  error: _propTypes["default"].bool
+};
 
-},{"./hocs/withRates.js":158,"c3":161,"d3":59,"react":145}],158:[function(require,module,exports){
+},{"./hocs/withRates.js":157,"c3":160,"d3":59,"prop-types":135,"react":145}],157:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -48920,6 +48909,8 @@ Object.defineProperty(exports, "__esModule", {
 exports["default"] = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _constants = require("../../utils/constants.js");
 
@@ -48932,8 +48923,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _extends() { _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; return _extends.apply(this, arguments); }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -48952,98 +48941,107 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
 
 function withRates(WrappedComponent) {
-  return (
-    /*#__PURE__*/
-    function (_Component) {
-      _inherits(_class, _Component);
+  var hoc =
+  /*#__PURE__*/
+  function (_Component) {
+    _inherits(hoc, _Component);
 
-      function _class(props) {
-        var _this;
+    function hoc(props) {
+      var _this;
 
-        _classCallCheck(this, _class);
+      _classCallCheck(this, hoc);
 
-        _this = _possibleConstructorReturn(this, _getPrototypeOf(_class).call(this, props));
-        _this.state = {
-          loading: false,
-          rates: [],
-          base: 'MXN'
-        };
-        _this.memoizeData = (0, _memoizee["default"])(_this.getData, {
-          promise: true,
-          maxAge: 60000
-        });
-        _this.handleDateChange = _this.handleDateChange.bind(_assertThisInitialized(_this));
-        return _this;
+      _this = _possibleConstructorReturn(this, _getPrototypeOf(hoc).call(this, props));
+      _this.state = {
+        loading: false,
+        rates: [],
+        base: 'MXN'
+      };
+      _this.memoizeData = (0, _memoizee["default"])(_this.getData, {
+        promise: true,
+        maxAge: 60000
+      });
+      _this.handleDateChange = _this.handleDateChange.bind(_assertThisInitialized(_this));
+      return _this;
+    }
+
+    _createClass(hoc, [{
+      key: "componentDidMount",
+      value: function componentDidMount() {
+        this.handleDateChange();
       }
-
-      _createClass(_class, [{
-        key: "componentDidMount",
-        value: function componentDidMount() {
+    }, {
+      key: "componentDidUpdate",
+      value: function componentDidUpdate(prevProps) {
+        if (prevProps.date !== this.props.date) {
           this.handleDateChange();
         }
-      }, {
-        key: "componentDidUpdate",
-        value: function componentDidUpdate(prevProps) {
-          if (prevProps.date !== this.props.date) {
-            this.handleDateChange();
-          }
-        }
-      }, {
-        key: "handleDateChange",
-        value: function handleDateChange() {
-          var _this2 = this;
+      }
+    }, {
+      key: "handleDateChange",
+      value: function handleDateChange() {
+        var _this2 = this;
 
-          this.setState({
-            loading: true
-          });
-          this.memoizeData(this.props.date).then(function (data) {
-            _this2.setState(data);
-          });
-        }
-      }, {
-        key: "getData",
-        value: function getData(date) {
-          var currencies = ['USD', 'AUD', 'CAD', 'PLN', 'MXN'];
-          var url = this.makeUrl(date, currencies);
-          return _axios["default"].get(url).then(function (_ref) {
-            var data = _ref.data;
-            return {
-              rates: Object.keys(data.rates).map(function (key) {
-                return [key, data.rates[key]];
-              })
-            };
-          })["catch"](function (error) {
-            console.log('something went wrong');
-          });
-        }
-      }, {
-        key: "makeUrl",
-        value: function makeUrl(date, currencies) {
-          var currencyList = currencies.reduce(function (str, currency) {
-            return str + (str ? ',' : '') + currency;
-          }, '');
-          return "http://data.fixer.io/api/".concat(date, "?access_key=").concat(_constants.API_KEY, "&symbols=").concat(currencyList, "&format=1");
-        }
-      }, {
-        key: "render",
-        value: function render() {
-          return _react["default"].createElement(WrappedComponent, _extends({
-            loading: this.state.loading,
-            base: this.state.base,
-            rates: this.state.rates
-          }, this.props));
-        }
-      }]);
+        this.setState({
+          loading: true
+        });
+        this.memoizeData(this.props.date).then(function (data) {
+          _this2.setState(data);
+        });
+      }
+    }, {
+      key: "getData",
+      value: function getData(date) {
+        var currencies = ['USD', 'AUD', 'CAD', 'PLN', 'MXN'];
+        var url = this.makeUrl(date, currencies);
+        return _axios["default"].get(url).then(function (_ref) {
+          var data = _ref.data;
+          return {
+            rates: Object.keys(data.rates).map(function (key) {
+              return [key, data.rates[key]];
+            }),
+            error: false
+          };
+        })["catch"](function () {
+          return {
+            rates: [],
+            error: true
+          };
+        });
+      }
+    }, {
+      key: "makeUrl",
+      value: function makeUrl(date, currencies) {
+        var currencyList = currencies.reduce(function (str, currency) {
+          return str + (str ? ',' : '') + currency;
+        }, '');
+        return "http://data.fixer.io/api/".concat(date, "?access_key=").concat(_constants.API_KEY, "&symbols=").concat(currencyList, "&format=1");
+      }
+    }, {
+      key: "render",
+      value: function render() {
+        return _react["default"].createElement(WrappedComponent, {
+          loading: this.state.loading,
+          base: this.state.base,
+          error: this.state.error,
+          rates: this.state.rates
+        });
+      }
+    }]);
 
-      return _class;
-    }(_react.Component)
-  );
+    return hoc;
+  }(_react.Component);
+
+  hoc.propTypes = {
+    date: _propTypes["default"].string
+  };
+  return hoc;
 }
 
 var _default = withRates;
 exports["default"] = _default;
 
-},{"../../utils/constants.js":160,"axios":1,"memoizee":117,"react":145}],159:[function(require,module,exports){
+},{"../../utils/constants.js":159,"axios":1,"memoizee":117,"prop-types":135,"react":145}],158:[function(require,module,exports){
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -49056,7 +49054,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 
 _reactDom["default"].render(_react["default"].createElement(_App["default"], null), document.getElementById('container'));
 
-},{"./App":155,"react":145,"react-dom":139}],160:[function(require,module,exports){
+},{"./App":155,"react":145,"react-dom":139}],159:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -49066,7 +49064,7 @@ exports.API_KEY = void 0;
 var API_KEY = 'dcb6e09de1bbe8ab8c1362caeff468e2';
 exports.API_KEY = API_KEY;
 
-},{}],161:[function(require,module,exports){
+},{}],160:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -54339,4 +54337,4 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   }, t;
 });
 
-},{"d3":59}]},{},[159]);
+},{"d3":59}]},{},[158]);

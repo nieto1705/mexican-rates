@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import Graph from './components/Graph.js';
-import DatePicker from './components/DatePicker.js';
 
 const getTodayDate = () => {
   const date = new Date();
@@ -22,7 +21,7 @@ export default class App extends Component {
   }
   render() {
     return (
-      <div>
+      <div className="content-box">
         <input type="date" value={this.state.date} onChange={this.handleChange} />
         <Graph date={this.state.date} />
       </div>

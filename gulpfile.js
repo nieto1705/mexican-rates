@@ -78,7 +78,6 @@ function compileSass() {
     .src(paths.sass.src)
     .pipe(sass())
     .pipe(gulp.dest(paths.sass.dest))
-    .pipe(server.stream());
 }
 
 function watch() {

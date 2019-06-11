@@ -1,16 +1,17 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { API_KEY } from '../../utils/constants.js';
 import axios from 'axios';
 import memoize from 'memoizee';
 
 function withRates(WrappedComponent) {
-  return class extends Component {
+  class hoc extends Component {
     constructor(props) {
       super(props);
       this.state = {
         loading: false,
         rates: [],
-        base:'MXN'
+        base: 'MXN'
       };
       this.memoizeData = memoize(this.getData, {
         promise: true,
@@ -39,10 +40,15 @@ function withRates(WrappedComponent) {
         .get(url)
         .then(({ data }) => {
           return {
-            rates: Object.keys(data.rates).map(key => [key, data.rates[key]])          };
+            rates: Object.keys(data.rates).map(key => [key, data.rates[key]]),
+            error: false
+          };
         })
-        .catch(error => {
-          console.log('something went wrong');
+        .catch(() => {
+          return {
+            rates: [],
+            error: true
+          };
         });
     }
     makeUrl(date, currencies) {
@@ -57,12 +63,16 @@ function withRates(WrappedComponent) {
         <WrappedComponent
           loading={this.state.loading}
           base={this.state.base}
+          error={this.state.error}
           rates={this.state.rates}
-          {...this.props}
         />
       );
     }
+  }
+  hoc.propTypes = {
+    date: PropTypes.string
   };
+  return hoc;
 }
 
 export default withRates;

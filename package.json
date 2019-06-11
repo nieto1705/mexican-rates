@@ -4,7 +4,9 @@
   "description": "it's just a graphic of the rates of the Mexican Peso against other currencies.",
   "main": ".eslintrc.js",
   "scripts": {
-    "test": "src/index.js"
+    "test": "src/index.js",
+    "start":"gulp",
+    "build":"gulp build"
   },
   "repository": {
     "type": "git",
