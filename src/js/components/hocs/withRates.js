@@ -13,6 +13,7 @@ function withRates(WrappedComponent) {
         rates: [],
         base: 'MXN'
       };
+      //Se ocupa memoize para reducir el numero de llamadas al server
       this.memoizeData = memoize(this.getData, {
         promise: true,
         maxAge: 60000

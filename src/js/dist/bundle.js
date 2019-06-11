@@ -48752,11 +48752,13 @@ function (_Component) {
     value: function render() {
       return _react["default"].createElement("div", {
         className: "content-box"
-      }, _react["default"].createElement("input", {
+      }, _react["default"].createElement("div", {
+        className: "date-picker"
+      }, _react["default"].createElement("h4", null, "Fecha"), _react["default"].createElement("input", {
         type: "date",
         value: this.state.date,
         onChange: this.handleChange
-      }), _react["default"].createElement(_Graph["default"], {
+      })), _react["default"].createElement(_Graph["default"], {
         date: this.state.date
       }));
     }
@@ -48956,7 +48958,8 @@ function withRates(WrappedComponent) {
         loading: false,
         rates: [],
         base: 'MXN'
-      };
+      }; //Se ocupa memoize para reducir el numero de llamadas al server
+
       _this.memoizeData = (0, _memoizee["default"])(_this.getData, {
         promise: true,
         maxAge: 60000

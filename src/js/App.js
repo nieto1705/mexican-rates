@@ -22,7 +22,10 @@ export default class App extends Component {
   render() {
     return (
       <div className="content-box">
-        <input type="date" value={this.state.date} onChange={this.handleChange} />
+        <div className="date-picker">
+          <h4>Fecha</h4>
+          <input type="date" value={this.state.date} onChange={this.handleChange} />
+        </div>
         <Graph date={this.state.date} />
       </div>
     );

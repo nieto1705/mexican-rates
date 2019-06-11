@@ -6,4 +6,27 @@
 
 body {
   font-family: 'Roboto', sans-serif;
-  margin: 40px; }
+  max-width: 1200px;
+  margin: auto; }
+
+.content-box {
+  padding: 32px;
+  display: flex;
+  flex-direction: column; }
+  .content-box .date-picker {
+    margin-bottom: 1.5em;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end; }
+    .content-box .date-picker h4 {
+      margin: 0 6px 0 0; }
+    .content-box .date-picker input {
+      border-radius: 5px;
+      -webkit-border-radius: 5px;
+      -moz-border-radius: 5px;
+      -ms-border-radius: 5px;
+      -o-border-radius: 5px;
+      padding: 4px 8px;
+      border: 1px solid #e0e0e0; }
+      .content-box .date-picker input :focus {
+        border: 1px solid #1890ff; }
