@@ -7,14 +7,20 @@ class Graph extends Component {
     this.chart = c3.generate({
       bindto: this.chartRef,
       data: {
-        columns: this.props.rates
+        x: 'x',
+        columns: [['x', this.props.date], ...this.props.rates]
+      },
+      axis: {
+        x: {
+          type: 'category'
+        }
       }
     });
   }
   componentDidUpdate(prevProps) {
     if (JSON.stringify(prevProps.rates) !== JSON.stringify(this.props.rates)) {
       this.chart.load({
-        columns: this.props.rates,
+        columns: [['x', this.props.date], ...this.props.rates],
         type: 'bar'
       });
     }

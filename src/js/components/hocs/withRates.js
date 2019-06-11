@@ -28,7 +28,7 @@ function withRates(WrappedComponent) {
     handleDateChange() {
       this.setState({ loading: true });
       this.memoizeData(this.props.date).then(data => {
-        this.setState({ rates: data, loading: false });
+        this.setState(data);
       });
     }
     getData(date) {
@@ -37,7 +37,10 @@ function withRates(WrappedComponent) {
       return axios
         .get(url)
         .then(({ data }) => {
-          return Object.keys(data.rates).map(key => [key, data.rates[key]]);
+          return {
+            rates: Object.keys(data.rates).map(key => [key, data.rates[key]]),
+            currencies: Object.keys(data.rates)
+          };
         })
         .catch(error => {
           console.log('something went wrong');
@@ -52,7 +55,12 @@ function withRates(WrappedComponent) {
     }
     render() {
       return (
-        <WrappedComponent loading={this.state.loading} rates={this.state.rates} {...this.props} />
+        <WrappedComponent
+          loading={this.state.loading}
+          currencies={this.state.currencies}
+          rates={this.state.rates}
+          {...this.props}
+        />
       );
     }
   };
