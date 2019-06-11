@@ -35,14 +35,24 @@ function withRates(WrappedComponent) {
       });
     }
     getData(date) {
-      const currencies = ['USD', 'AUD', 'CAD', 'PLN', 'MXN'];
+      const currencies = ['USD', 'AUD', 'CAD', 'PLN', 'MXN', 'EUR'];
       const url = this.makeUrl(date, currencies);
       return axios
         .get(url)
         .then(({ data }) => {
+          // como el api free de fixer.io no permite establecer la moneda
+          // Se hace una conversion cruzada
+          const excRate = 1 / data.rates.MXN;
           return {
-            rates: Object.keys(data.rates).map(key => [key, data.rates[key]]),
-            error: false
+            rates: Object.keys(data.rates).reduce((arr, key) => {
+              if (key !== 'MXN') {
+                const currency = 1 / data.rates[key] / excRate;
+                return [...arr, [key, parseFloat(currency).toFixed(2)]];
+              }
+              return arr;
+            }, []),
+            error: false,
+            mxnRate: data.rates.MXN
           };
         })
         .catch(() => {

@@ -49026,6 +49026,14 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -49095,15 +49103,24 @@ function withRates(WrappedComponent) {
     }, {
       key: "getData",
       value: function getData(date) {
-        var currencies = ['USD', 'AUD', 'CAD', 'PLN', 'MXN'];
+        var currencies = ['USD', 'AUD', 'CAD', 'PLN', 'MXN', 'EUR'];
         var url = this.makeUrl(date, currencies);
         return _axios["default"].get(url).then(function (_ref) {
           var data = _ref.data;
+          // como el api free de fixer.io no permite establecer la moneda
+          // Se hace una conversion cruzada
+          var excRate = 1 / data.rates.MXN;
           return {
-            rates: Object.keys(data.rates).map(function (key) {
-              return [key, data.rates[key]];
-            }),
-            error: false
+            rates: Object.keys(data.rates).reduce(function (arr, key) {
+              if (key !== 'MXN') {
+                var currency = 1 / data.rates[key] / excRate;
+                return [].concat(_toConsumableArray(arr), [[key, parseFloat(currency).toFixed(2)]]);
+              }
+
+              return arr;
+            }, []),
+            error: false,
+            mxnRate: data.rates.MXN
           };
         })["catch"](function () {
           return {
