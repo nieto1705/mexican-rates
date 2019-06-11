@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Graph from './components/Graph.js';
+import DatePicker from './components/DatePicker.js';
 
 const getTodayDate = () => {
   const date = new Date();
@@ -17,14 +18,14 @@ export default class App extends Component {
     this.state = {
       date: getTodayDate()
     };
-    this.handleChange = e => this.setState({ date: e.target.value });
+    this.handleChange = date => this.setState({ date });
   }
   render() {
     return (
       <div className="content-box">
         <div className="date-picker">
           <h4>Fecha</h4>
-          <input type="date" value={this.state.date} onChange={this.handleChange} />
+          <DatePicker value={this.state.date} onChange={this.handleChange} max={getTodayDate()} />
         </div>
         <Graph date={this.state.date} />
       </div>

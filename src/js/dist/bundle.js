@@ -48688,6 +48688,8 @@ var _react = _interopRequireWildcard(require("react"));
 
 var _Graph = _interopRequireDefault(require("./components/Graph.js"));
 
+var _DatePicker = _interopRequireDefault(require("./components/DatePicker.js"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
@@ -48738,9 +48740,9 @@ function (_Component) {
       date: getTodayDate()
     };
 
-    _this.handleChange = function (e) {
+    _this.handleChange = function (date) {
       return _this.setState({
-        date: e.target.value
+        date: date
       });
     };
 
@@ -48754,10 +48756,10 @@ function (_Component) {
         className: "content-box"
       }, _react["default"].createElement("div", {
         className: "date-picker"
-      }, _react["default"].createElement("h4", null, "Fecha"), _react["default"].createElement("input", {
-        type: "date",
+      }, _react["default"].createElement("h4", null, "Fecha"), _react["default"].createElement(_DatePicker["default"], {
         value: this.state.date,
-        onChange: this.handleChange
+        onChange: this.handleChange,
+        max: getTodayDate()
       })), _react["default"].createElement(_Graph["default"], {
         date: this.state.date
       }));
@@ -48769,7 +48771,105 @@ function (_Component) {
 
 exports["default"] = App;
 
-},{"./components/Graph.js":156,"react":145}],156:[function(require,module,exports){
+},{"./components/DatePicker.js":156,"./components/Graph.js":157,"react":145}],156:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var DatePicker =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(DatePicker, _Component);
+
+  function DatePicker(props) {
+    var _this;
+
+    _classCallCheck(this, DatePicker);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(DatePicker).call(this, props));
+    _this.state = {
+      value: _this.props.value
+    };
+
+    _this.handleChange = function (event) {
+      return _this.props.onChange(event.target.value);
+    };
+
+    return _this;
+  }
+
+  _createClass(DatePicker, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.inputRef.setAttribute('max', this.props.max);
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      return _react["default"].createElement("input", {
+        type: "date",
+        ref: function ref(_ref) {
+          return _this2.inputRef = _ref;
+        },
+        value: this.state.value,
+        onChange: this.handleChange
+      });
+    }
+  }], [{
+    key: "getDerivedStateFromProps",
+    value: function getDerivedStateFromProps(props, state) {
+      if (props.value !== state.value) {
+        return {
+          value: props.value
+        };
+      }
+
+      return {};
+    }
+  }]);
+
+  return DatePicker;
+}(_react.Component);
+
+exports["default"] = DatePicker;
+DatePicker.propTypes = {
+  value: _propTypes["default"].string,
+  onChange: _propTypes["default"].func,
+  max: _propTypes["default"].string
+};
+
+},{"prop-types":135,"react":145}],157:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -48902,7 +49002,7 @@ Graph.propTypes = {
   error: _propTypes["default"].bool
 };
 
-},{"./hocs/withRates.js":157,"c3":160,"d3":59,"prop-types":135,"react":145}],157:[function(require,module,exports){
+},{"./hocs/withRates.js":158,"c3":161,"d3":59,"prop-types":135,"react":145}],158:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -49044,7 +49144,7 @@ function withRates(WrappedComponent) {
 var _default = withRates;
 exports["default"] = _default;
 
-},{"../../utils/constants.js":159,"axios":1,"memoizee":117,"prop-types":135,"react":145}],158:[function(require,module,exports){
+},{"../../utils/constants.js":160,"axios":1,"memoizee":117,"prop-types":135,"react":145}],159:[function(require,module,exports){
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -49057,7 +49157,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 
 _reactDom["default"].render(_react["default"].createElement(_App["default"], null), document.getElementById('container'));
 
-},{"./App":155,"react":145,"react-dom":139}],159:[function(require,module,exports){
+},{"./App":155,"react":145,"react-dom":139}],160:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -49067,7 +49167,7 @@ exports.API_KEY = void 0;
 var API_KEY = 'dcb6e09de1bbe8ab8c1362caeff468e2';
 exports.API_KEY = API_KEY;
 
-},{}],160:[function(require,module,exports){
+},{}],161:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -54340,4 +54440,4 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   }, t;
 });
 
-},{"d3":59}]},{},[158]);
+},{"d3":59}]},{},[159]);
