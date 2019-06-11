@@ -9,7 +9,8 @@ function withRates(WrappedComponent) {
       super(props);
       this.state = {
         loading: false,
-        rates: []
+        rates: [],
+        base:'MXN'
       };
       this.memoizeData = memoize(this.getData, {
         promise: true,
@@ -38,9 +39,7 @@ function withRates(WrappedComponent) {
         .get(url)
         .then(({ data }) => {
           return {
-            rates: Object.keys(data.rates).map(key => [key, data.rates[key]]),
-            currencies: Object.keys(data.rates)
-          };
+            rates: Object.keys(data.rates).map(key => [key, data.rates[key]])          };
         })
         .catch(error => {
           console.log('something went wrong');
@@ -57,7 +56,7 @@ function withRates(WrappedComponent) {
       return (
         <WrappedComponent
           loading={this.state.loading}
-          currencies={this.state.currencies}
+          base={this.state.base}
           rates={this.state.rates}
           {...this.props}
         />

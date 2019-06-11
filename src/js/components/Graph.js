@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import withRates from './hocs/withRates.js';
 import c3 from 'c3';
+import * as d3 from 'd3';
+
 
 class Graph extends Component {
   componentDidMount() {
@@ -8,11 +10,16 @@ class Graph extends Component {
       bindto: this.chartRef,
       data: {
         x: 'x',
-        columns: [['x', this.props.date], ...this.props.rates]
+        columns: [['x', this.props.base], ...this.props.rates]
       },
       axis: {
         x: {
           type: 'category'
+        },
+        y:{
+          tick:{
+            format: d3.format("$")
+          }
         }
       }
     });
@@ -20,7 +27,7 @@ class Graph extends Component {
   componentDidUpdate(prevProps) {
     if (JSON.stringify(prevProps.rates) !== JSON.stringify(this.props.rates)) {
       this.chart.load({
-        columns: [['x', this.props.date], ...this.props.rates],
+        columns: [['x', this.props.base], ...this.props.rates],
         type: 'bar'
       });
     }

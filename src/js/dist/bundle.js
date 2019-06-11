@@ -48817,6 +48817,8 @@ var _withRates = _interopRequireDefault(require("./hocs/withRates.js"));
 
 var _c = _interopRequireDefault(require("c3"));
 
+var d3 = _interopRequireWildcard(require("d3"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
@@ -48865,11 +48867,16 @@ function (_Component) {
         bindto: this.chartRef,
         data: {
           x: 'x',
-          columns: [['x', this.props.date]].concat(_toConsumableArray(this.props.rates))
+          columns: [['x', this.props.base]].concat(_toConsumableArray(this.props.rates))
         },
         axis: {
           x: {
             type: 'category'
+          },
+          y: {
+            tick: {
+              format: d3.format("$")
+            }
           }
         }
       });
@@ -48879,7 +48886,7 @@ function (_Component) {
     value: function componentDidUpdate(prevProps) {
       if (JSON.stringify(prevProps.rates) !== JSON.stringify(this.props.rates)) {
         this.chart.load({
-          columns: [['x', this.props.date]].concat(_toConsumableArray(this.props.rates)),
+          columns: [['x', this.props.base]].concat(_toConsumableArray(this.props.rates)),
           type: 'bar'
         });
       }
@@ -48904,7 +48911,7 @@ var _default = (0, _withRates["default"])(Graph);
 
 exports["default"] = _default;
 
-},{"./hocs/withRates.js":158,"c3":161,"react":145}],158:[function(require,module,exports){
+},{"./hocs/withRates.js":158,"c3":161,"d3":59,"react":145}],158:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -48958,7 +48965,8 @@ function withRates(WrappedComponent) {
         _this = _possibleConstructorReturn(this, _getPrototypeOf(_class).call(this, props));
         _this.state = {
           loading: false,
-          rates: []
+          rates: [],
+          base: 'MXN'
         };
         _this.memoizeData = (0, _memoizee["default"])(_this.getData, {
           promise: true,
@@ -49002,8 +49010,7 @@ function withRates(WrappedComponent) {
             return {
               rates: Object.keys(data.rates).map(function (key) {
                 return [key, data.rates[key]];
-              }),
-              currencies: Object.keys(data.rates)
+              })
             };
           })["catch"](function (error) {
             console.log('something went wrong');
@@ -49022,7 +49029,7 @@ function withRates(WrappedComponent) {
         value: function render() {
           return _react["default"].createElement(WrappedComponent, _extends({
             loading: this.state.loading,
-            currencies: this.state.currencies,
+            base: this.state.base,
             rates: this.state.rates
           }, this.props));
         }
@@ -49056,7 +49063,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.API_KEY = void 0;
-var API_KEY = 'put your Api';
+var API_KEY = 'dcb6e09de1bbe8ab8c1362caeff468e2';
 exports.API_KEY = API_KEY;
 
 },{}],161:[function(require,module,exports){
