@@ -48686,7 +48686,7 @@ exports["default"] = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _Graph = _interopRequireDefault(require("./components/Graph.js"));
+var _Summary = _interopRequireDefault(require("./components/Summary.js"));
 
 var _DatePicker = _interopRequireDefault(require("./components/DatePicker.js"));
 
@@ -48760,7 +48760,7 @@ function (_Component) {
         value: this.state.date,
         onChange: this.handleChange,
         max: getTodayDate()
-      })), _react["default"].createElement(_Graph["default"], {
+      })), _react["default"].createElement(_Summary["default"], {
         date: this.state.date
       }));
     }
@@ -48771,7 +48771,96 @@ function (_Component) {
 
 exports["default"] = App;
 
-},{"./components/DatePicker.js":156,"./components/Graph.js":157,"react":145}],156:[function(require,module,exports){
+},{"./components/DatePicker.js":157,"./components/Summary.js":159,"react":145}],156:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var CurrencySelector =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(CurrencySelector, _Component);
+
+  function CurrencySelector(props) {
+    var _this;
+
+    _classCallCheck(this, CurrencySelector);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(CurrencySelector).call(this, props));
+    _this.state = {
+      editable: false
+    };
+    return _this;
+  }
+
+  _createClass(CurrencySelector, [{
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+
+      return _react["default"].createElement("div", {
+        className: "row"
+      }, _react["default"].createElement("div", {
+        className: "col s1"
+      }, _react["default"].createElement("div", {
+        className: "add_currency"
+      }, _react["default"].createElement("h4", null, "Agregar nueva Divisa"), _react["default"].createElement("input", {
+        type: "text",
+        placeholder: "USD"
+      }), _react["default"].createElement("button", null, "+")), _react["default"].createElement("table", null, _react["default"].createElement("thead", null, _react["default"].createElement("tr", {
+        className: "header"
+      }, _react["default"].createElement("th", null, "Divisa"), _react["default"].createElement("th", null, "Valor en MXN"), this.state.editable ? _react["default"].createElement("th", {
+        className: "delete"
+      }) : null)), this.props.currencies.map(function (c) {
+        return _react["default"].createElement("tbody", {
+          key: c
+        }, _react["default"].createElement("tr", {
+          className: "field"
+        }, _react["default"].createElement("td", null, c[0]), _react["default"].createElement("td", null, c[1]), _this2.state.editable ? _react["default"].createElement("td", {
+          className: "delete"
+        }, "Eliminar") : null));
+      }))));
+    }
+  }]);
+
+  return CurrencySelector;
+}(_react.Component);
+
+exports["default"] = CurrencySelector;
+CurrencySelector.propTypes = {
+  currencies: _propTypes["default"].array
+};
+
+},{"prop-types":135,"react":145}],157:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -48869,7 +48958,7 @@ DatePicker.propTypes = {
   max: _propTypes["default"].string
 };
 
-},{"prop-types":135,"react":145}],157:[function(require,module,exports){
+},{"prop-types":135,"react":145}],158:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -48981,11 +49070,87 @@ function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      return _react["default"].createElement(_react["default"].Fragment, null, _react["default"].createElement("div", {
+      return _react["default"].createElement("div", {
         ref: function ref(_ref) {
           return _this2.chartRef = _ref;
         }
-      }), _react["default"].createElement("div", {
+      });
+    }
+  }]);
+
+  return Graph;
+}(_react.Component);
+
+exports["default"] = Graph;
+Graph.propTypes = {
+  base: _propTypes["default"].string,
+  rates: _propTypes["default"].array,
+  loading: _propTypes["default"].bool
+};
+
+},{"./hocs/withRates.js":160,"c3":163,"d3":59,"prop-types":135,"react":145}],159:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports["default"] = void 0;
+
+var _react = _interopRequireWildcard(require("react"));
+
+var _propTypes = _interopRequireDefault(require("prop-types"));
+
+var _Graph = _interopRequireDefault(require("./Graph.js"));
+
+var _CurrencySelector = _interopRequireDefault(require("./CurrencySelector.js"));
+
+var _withRates = _interopRequireDefault(require("./hocs/withRates.js"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var Summary =
+/*#__PURE__*/
+function (_Component) {
+  _inherits(Summary, _Component);
+
+  function Summary() {
+    _classCallCheck(this, Summary);
+
+    return _possibleConstructorReturn(this, _getPrototypeOf(Summary).apply(this, arguments));
+  }
+
+  _createClass(Summary, [{
+    key: "render",
+    value: function render() {
+      return _react["default"].createElement(_react["default"].Fragment, null, _react["default"].createElement("div", {
+        className: "summary-container"
+      }, _react["default"].createElement(_Graph["default"], {
+        base: this.props.base,
+        rates: this.props.rates,
+        loading: this.props.loading
+      }), _react["default"].createElement(_CurrencySelector["default"], {
+        currencies: this.props.rates
+      })), _react["default"].createElement("div", {
         className: "load-box ".concat(this.props.loading ? 'active' : '')
       }, "Cargando"), _react["default"].createElement("div", {
         className: "error-box ".concat(this.props.error ? 'active' : '')
@@ -48993,21 +49158,23 @@ function (_Component) {
     }
   }]);
 
-  return Graph;
+  return Summary;
 }(_react.Component);
 
-var _default = (0, _withRates["default"])(Graph);
-
-exports["default"] = _default;
-Graph.propTypes = {
+Summary.propTypes = {
   base: _propTypes["default"].string,
   rates: _propTypes["default"].array,
+  currencies: _propTypes["default"].array,
   loading: _propTypes["default"].bool,
   errCode: _propTypes["default"].number,
   error: _propTypes["default"].bool
 };
 
-},{"./hocs/withRates.js":158,"c3":161,"d3":59,"prop-types":135,"react":145}],158:[function(require,module,exports){
+var _default = (0, _withRates["default"])(Summary);
+
+exports["default"] = _default;
+
+},{"./CurrencySelector.js":156,"./Graph.js":158,"./hocs/withRates.js":160,"prop-types":135,"react":145}],160:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -49070,7 +49237,8 @@ function withRates(WrappedComponent) {
       _this.state = {
         loading: false,
         rates: [],
-        base: 'MXN'
+        base: 'MXN',
+        currencies: ['USD', 'AUD', 'CAD', 'PLN', 'MXN', 'EUR']
       }; //Se ocupa memoize para reducir el numero de llamadas al server
 
       _this.memoizeData = (0, _memoizee["default"])(_this.getData, {
@@ -49108,8 +49276,7 @@ function withRates(WrappedComponent) {
     }, {
       key: "getData",
       value: function getData(date) {
-        var currencies = ['USD', 'AUD', 'CAD', 'PLN', 'MXN', 'EUR'];
-        var url = this.makeUrl(date, currencies);
+        var url = this.makeUrl(date, this.state.currencies);
         return _axios["default"].get(url).then(function (_ref) {
           var data = _ref.data;
 
@@ -49159,6 +49326,7 @@ function withRates(WrappedComponent) {
       value: function render() {
         return _react["default"].createElement(WrappedComponent, {
           loading: this.state.loading,
+          currencies: this.state.currencies,
           base: this.state.base,
           error: this.state.error,
           errCode: this.state.errCode,
@@ -49179,7 +49347,7 @@ function withRates(WrappedComponent) {
 var _default = withRates;
 exports["default"] = _default;
 
-},{"../../utils/constants.js":160,"axios":1,"memoizee":117,"prop-types":135,"react":145}],159:[function(require,module,exports){
+},{"../../utils/constants.js":162,"axios":1,"memoizee":117,"prop-types":135,"react":145}],161:[function(require,module,exports){
 "use strict";
 
 var _react = _interopRequireDefault(require("react"));
@@ -49192,7 +49360,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 
 _reactDom["default"].render(_react["default"].createElement(_App["default"], null), document.getElementById('container'));
 
-},{"./App":155,"react":145,"react-dom":139}],160:[function(require,module,exports){
+},{"./App":155,"react":145,"react-dom":139}],162:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -49202,7 +49370,7 @@ exports.API_KEY = void 0;
 var API_KEY = 'dcb6e09de1bbe8ab8c1362caeff468e2';
 exports.API_KEY = API_KEY;
 
-},{}],161:[function(require,module,exports){
+},{}],163:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -54475,4 +54643,4 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
   }, t;
 });
 
-},{"d3":59}]},{},[159]);
+},{"d3":59}]},{},[161]);

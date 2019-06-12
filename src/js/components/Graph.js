@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import c3 from 'c3';
 import * as d3 from 'd3';
 
-class Graph extends Component {
+export default class Graph extends Component {
   constructor(props) {
     super(props);
 
@@ -49,25 +49,12 @@ class Graph extends Component {
     });
   }
   render() {
-    return (
-      <React.Fragment>
-        <div ref={ref => (this.chartRef = ref)} />
-        <div className={`load-box ${this.props.loading ? 'active' : ''}`}>Cargando</div>
-        <div className={`error-box ${this.props.error ? 'active' : ''}`}>
-          No se pudo cargar la información de ese dia{' '}
-          {this.props.errCode ? <b>,Codigo de error: {this.props.errCode}</b> : null}
-        </div>
-      </React.Fragment>
-    );
+    return <div ref={ref => (this.chartRef = ref)} />;
   }
 }
-
-export default withRates(Graph);
 
 Graph.propTypes = {
   base: PropTypes.string,
   rates: PropTypes.array,
-  loading: PropTypes.bool,
-  errCode: PropTypes.number,
-  error: PropTypes.bool
+  loading: PropTypes.bool
 };

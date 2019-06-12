@@ -1,3 +1,9 @@
+/// materialize imports
+@import "color-variables";
+@import "color-classes";
+@import "variables";
+@import "global";
+
 @font-face {
     font-family: 'Roboto';
     src: url('../fonts/Roboto-Regular.ttf') format('truetype');
@@ -5,8 +11,10 @@
     font-style: normal;
   }
 
+/// variables 
 $primary-color: #1890ff;
 $error-color:#d4380d;
+$line-gray:#e8e8e8;
 
   body{
     font-family: 'Roboto', sans-serif;
@@ -25,24 +33,29 @@ $error-color:#d4380d;
       justify-content: flex-end;
       h4{
         margin: 0 6px 0 0;
+        font-size: 14px;
       }
-      input{
-        border-radius: 5px;
-        -webkit-border-radius: 5px;
-        -moz-border-radius: 5px;
-        -ms-border-radius: 5px;
-        -o-border-radius: 5px;
-        padding: 4px 8px;
-        border: 1px solid #e0e0e0;
-        :focus{
-          border: 1px solid $primary-color;
-        }
-}
     }  
   }
 
+
+  input{
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    padding: 4px 8px;
+    border: 1px solid #e0e0e0;
+    &:focus{
+      border: 1px solid $primary-color;
+    }
+  }
+
+
 .load-box{
   display: none;
+  margin-top: 24px;
   &.active{
     display: flex;
     justify-content: flex-end;
@@ -81,6 +94,56 @@ $error-color:#d4380d;
   }
 }
 
+.row{
+  margin-top: 1.5em;
+}
+
+.delete{
+  width:100px;
+}
+td.delete{
+  background-color: $error-color;
+  color:white;
+  text-align: center;
+  cursor: pointer;
+  &:hover{
+    background-color: lighten( $error-color, 10%)
+  }
+}
+
+.add_currency{
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  h4{
+    margin: 0 6px 0 0;
+    font-size: 14px;
+  }
+  input{
+    border-radius: 5px 0 0 5px;
+    -webkit-border-radius: 5px 0 0 5px;
+    -moz-border-radius: 5px 0 0 5px;
+    -ms-border-radius: 5px 0 0 5px;
+    -o-border-radius: 5px 0 0 5px;
+}
+  button{
+    background-color: $primary-color;
+    color:white;
+    border: 1px solid $line-gray;
+    padding: 5px 8px;
+    border-left: none;
+    font-weight: bold;
+    border-radius: 0 5px 5px 0;
+    -webkit-border-radius: 0 5px 5px 0;
+    -moz-border-radius: 0 5px 5px 0;
+    -ms-border-radius: 0 5px 5px 0;
+    -o-border-radius: 0 5px 5px 0;
+    &:hover{
+      cursor: pointer;
+      background-color: lighten($primary-color, 10%);
+    }
+}
+}
 
 @keyframes pulse {
   0% {

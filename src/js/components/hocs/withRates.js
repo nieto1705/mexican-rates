@@ -11,7 +11,8 @@ function withRates(WrappedComponent) {
       this.state = {
         loading: false,
         rates: [],
-        base: 'MXN'
+        base: 'MXN',
+        currencies: ['USD', 'AUD', 'CAD', 'PLN', 'MXN', 'EUR']
       };
       //Se ocupa memoize para reducir el numero de llamadas al server
       this.memoizeData = memoize(this.getData, {
@@ -35,8 +36,7 @@ function withRates(WrappedComponent) {
       });
     }
     getData(date) {
-      const currencies = ['USD', 'AUD', 'CAD', 'PLN', 'MXN', 'EUR'];
-      const url = this.makeUrl(date, currencies);
+      const url = this.makeUrl(date, this.state.currencies);
       return axios
         .get(url)
         .then(({ data }) => {
@@ -83,6 +83,7 @@ function withRates(WrappedComponent) {
       return (
         <WrappedComponent
           loading={this.state.loading}
+          currencies={this.state.currencies}
           base={this.state.base}
           error={this.state.error}
           errCode={this.state.errCode}

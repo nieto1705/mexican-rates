@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Graph from './components/Graph.js';
+import Summary from './components/Summary.js';
 import DatePicker from './components/DatePicker.js';
 
 const getTodayDate = () => {
@@ -27,7 +27,7 @@ export default class App extends Component {
           <h4>Fecha</h4>
           <DatePicker value={this.state.date} onChange={this.handleChange} max={getTodayDate()} />
         </div>
-        <Graph date={this.state.date} />
+        <Summary date={this.state.date} />
       </div>
     );
   }
