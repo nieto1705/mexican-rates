@@ -1,37 +1,35 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Graph from './Graph.js';
 import CurrencySelector from './CurrencySelector.js';
 import withRates from './hocs/withRates.js';
 
-class Summary extends Component {
-  render() {
-    return (
-      <React.Fragment>
-        <div className="summary-container">
-          <Graph
-            base={this.props.base}
-            rates={this.props.rates}
-            loading={this.props.loading}
-            deletedCurrencies={this.props.deletedCurrencies}
-          />
-          <CurrencySelector
-            currencies={this.props.currencies}
-            rates={this.props.rates}
-            loading={this.props.loading}
-            onAddCurrency={this.props.onAddCurrency}
-            onDeleteCurrency={this.props.onDeleteCurrency}
-          />
-        </div>
-        <div className={`load-box ${this.props.loading ? 'active' : ''}`}>Cargando</div>
-        <div className={`error-box ${this.props.error ? 'active' : ''}`}>
-          No se pudo cargar la información de ese dia{' '}
-          {this.props.errCode ? <b>,Codigo de error: {this.props.errCode}</b> : null}
-        </div>
-      </React.Fragment>
-    );
-  }
-}
+const Summary = p => {
+  return (
+    <React.Fragment>
+      <div className="summary-container">
+        <Graph
+          base={p.base}
+          rates={p.rates}
+          loading={p.loading}
+          deletedCurrencies={p.deletedCurrencies}
+        />
+        <CurrencySelector
+          currencies={p.currencies}
+          rates={p.rates}
+          loading={p.loading}
+          onAddCurrency={p.onAddCurrency}
+          onDeleteCurrency={p.onDeleteCurrency}
+        />
+      </div>
+      <div className={`load-box ${p.loading ? 'active' : ''}`}>Cargando</div>
+      <div className={`error-box ${p.error ? 'active' : ''}`}>
+        No se pudo cargar la información de ese dia{' '}
+        {p.errCode ? <b>,Codigo de error: {p.errCode}</b> : null}
+      </div>
+    </React.Fragment>
+  );
+};
 
 Summary.propTypes = {
   base: PropTypes.string,
