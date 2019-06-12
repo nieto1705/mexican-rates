@@ -12,31 +12,48 @@ function withRates(WrappedComponent) {
         loading: false,
         rates: [],
         base: 'MXN',
+        deletedCurencies: [],
         currencies: ['USD', 'AUD', 'CAD', 'PLN', 'MXN', 'EUR']
       };
       //Se ocupa memoize para reducir el numero de llamadas al server
       this.memoizeData = memoize(this.getData, {
         promise: true,
-        maxAge: 100000
+        maxAge: 10000000
       });
+
+      //binds
       this.handleDateChange = this.handleDateChange.bind(this);
+      this.handleAddCurrency = this.handleAddCurrency.bind(this);
+      this.handleDeleteCurrency = this.handleDeleteCurrency.bind(this);
     }
     componentDidMount() {
       this.handleDateChange();
     }
-    componentDidUpdate(prevProps) {
-      if (prevProps.date !== this.props.date) {
+    componentDidUpdate(prevProps, prevState) {
+      if (
+        (prevProps.date !== this.props.date || JSON.stringify(prevState.currencies)) !==
+        JSON.stringify(this.state.currencies)
+      ) {
         this.handleDateChange();
       }
     }
     handleDateChange() {
       this.setState({ loading: true });
-      this.memoizeData(this.props.date).then(data => {
+
+      /// se manda la url para que la funcion se vuelva a ejecutar si la url es distinta
+      this.memoizeData(this.makeUrl(this.props.date, this.state.currencies)).then(data => {
         this.setState(data);
       });
     }
-    getData(date) {
-      const url = this.makeUrl(date, this.state.currencies);
+    handleAddCurrency(currency) {
+      const nextCurrencies = [...this.state.currencies, currency];
+      this.setState({ currencies: nextCurrencies, deletedCurencies: [] });
+    }
+    handleDeleteCurrency(currency) {
+      const nextCurrencies = this.state.currencies.filter(c => c !== currency);
+      this.setState({ currencies: nextCurrencies, deletedCurencies: [currency] });
+    }
+    getData(url) {
       return axios
         .get(url)
         .then(({ data }) => {
@@ -84,6 +101,8 @@ function withRates(WrappedComponent) {
         <WrappedComponent
           loading={this.state.loading}
           currencies={this.state.currencies}
+          onDeleteCurrency={this.handleDeleteCurrency}
+          onAddCurrency={this.handleAddCurrency}
           base={this.state.base}
           error={this.state.error}
           errCode={this.state.errCode}

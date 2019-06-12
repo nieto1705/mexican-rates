@@ -10,7 +10,13 @@ class Summary extends Component {
       <React.Fragment>
         <div className="summary-container">
           <Graph base={this.props.base} rates={this.props.rates} loading={this.props.loading} />
-          <CurrencySelector currencies={this.props.rates} loading={this.props.loading} />
+          <CurrencySelector
+            currencies={this.props.currencies}
+            rates={this.props.rates}
+            loading={this.props.loading}
+            onAddCurrency={this.props.onAddCurrency}
+            onDeleteCurrency={this.props.onDeleteCurrency}
+          />
         </div>
         <div className={`load-box ${this.props.loading ? 'active' : ''}`}>Cargando</div>
         <div className={`error-box ${this.props.error ? 'active' : ''}`}>
@@ -28,7 +34,9 @@ Summary.propTypes = {
   currencies: PropTypes.array,
   loading: PropTypes.bool,
   errCode: PropTypes.number,
-  error: PropTypes.bool
+  error: PropTypes.bool,
+  onAddCurrency: PropTypes.func,
+  onDeleteCurrency: PropTypes.func
 };
 
 export default withRates(Summary);

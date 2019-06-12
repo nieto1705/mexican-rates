@@ -1,8 +1,9 @@
 /// materialize imports
-@import "color-variables";
-@import "color-classes";
-@import "variables";
-@import "global";
+@import "components/color-variables";
+@import "components/color-classes";
+@import "components/variables";
+@import "components/global";
+@import "components/buttons";
 
 @font-face {
     font-family: 'Roboto';
@@ -46,6 +47,7 @@ $line-gray:#e8e8e8;
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
     padding: 4px 8px;
+    outline:none;
     border: 1px solid #e0e0e0;
     &:focus{
       border: 1px solid $primary-color;
@@ -115,6 +117,7 @@ td.delete{
 .table-nav {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   .edit{
     button{
       border: none;
@@ -137,8 +140,22 @@ td.delete{
 
 .add-currency{
   display: flex;
-  align-items: center;
-  margin-bottom: 24px;
+  flex-direction:column;
+  align-items: flex-end;
+  margin-bottom: 10px;
+  .input-field{
+    display:flex;
+    align-items:center;
+  }
+  .error-helper{
+    font-size: 12px;
+    flex:1;
+    color:$error-color;
+    visibility:hidden;
+    &.visible{
+      visibility:visible;
+    }
+  }
   h4{
     margin: 0 6px 0 0;
     font-size: 14px;
@@ -149,7 +166,11 @@ td.delete{
     -moz-border-radius: 5px 0 0 5px;
     -ms-border-radius: 5px 0 0 5px;
     -o-border-radius: 5px 0 0 5px;
-}
+    margin: 6px 0;
+    &.error{
+      border-color: $error-color;      
+    }
+  }
   button{
     background-color: $primary-color;
     color:white;
@@ -162,8 +183,8 @@ td.delete{
     -moz-border-radius: 0 5px 5px 0;
     -ms-border-radius: 0 5px 5px 0;
     -o-border-radius: 0 5px 5px 0;
+    cursor: pointer;
     &:hover{
-      cursor: pointer;
       background-color: lighten($primary-color, 10%);
     }
 }

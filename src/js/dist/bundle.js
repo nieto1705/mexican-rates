@@ -48781,6 +48781,8 @@ exports["default"] = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
+var _supportedSymbols = require("../utils/supportedSymbols");
+
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
@@ -48797,9 +48799,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 
 function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
 
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
 
@@ -48817,16 +48819,69 @@ function (_Component) {
 
     _this = _possibleConstructorReturn(this, _getPrototypeOf(CurrencySelector).call(this, props));
     _this.state = {
-      editable: false
-    };
+      editable: false,
+      newCurrency: '',
+      inputStatus: {
+        success: true,
+        msg: ''
+      }
+    }; ///binds
+
+    _this.handleInputChange = _this.handleInputChange.bind(_assertThisInitialized(_this));
+    _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
     return _this;
   }
 
   _createClass(CurrencySelector, [{
+    key: "handleInputChange",
+    value: function handleInputChange(e) {
+      this.setState({
+        newCurrency: e.target.value
+      });
+    }
+  }, {
+    key: "handleSubmit",
+    value: function handleSubmit() {
+      var newCurrency = this.state.newCurrency;
+
+      if (!newCurrency) {
+        this.setState({
+          inputStatus: {
+            success: false,
+            msg: 'No se debe enviar un campo vacio'
+          }
+        });
+      } else if (!_supportedSymbols.supportedSymbols[newCurrency.toUpperCase().trim()]) {
+        this.setState({
+          inputStatus: {
+            success: false,
+            msg: 'No es una divisa valida'
+          }
+        });
+      } else if (this.props.currencies.includes(newCurrency.toUpperCase().trim())) {
+        this.setState({
+          inputStatus: {
+            success: false,
+            msg: 'Ya ha agregado antes esa divisa'
+          }
+        });
+      } else {
+        this.setState({
+          inputStatus: {
+            success: true,
+            msg: ''
+          },
+          newCurrency: ''
+        });
+        this.props.onAddCurrency(newCurrency);
+      }
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this2 = this;
 
+      var inputStatus = this.state.inputStatus;
       return _react["default"].createElement("div", {
         className: "row"
       }, _react["default"].createElement("div", {
@@ -48835,23 +48890,33 @@ function (_Component) {
         className: "table-nav"
       }, _react["default"].createElement("div", {
         className: "add-currency"
-      }, _react["default"].createElement("h4", null, "Agregar nueva Divisa"), _react["default"].createElement("input", {
+      }, _react["default"].createElement("div", {
+        className: "input-field"
+      }, _react["default"].createElement("h4", null, "Nueva Divisa"), _react["default"].createElement("input", {
+        value: this.state.newCurrency,
+        onChange: this.handleInputChange,
+        name: "currency",
+        className: inputStatus.success ? '' : 'error',
         type: "text",
         placeholder: "USD"
-      }), _react["default"].createElement("button", null, "+")), _react["default"].createElement("div", {
+      }), _react["default"].createElement("button", {
+        onClick: this.handleSubmit
+      }, "+")), _react["default"].createElement("span", {
+        className: "error-helper ".concat(inputStatus.success ? '' : 'visible')
+      }, inputStatus.msg)), _react["default"].createElement("div", {
         className: "edit"
       }, _react["default"].createElement("button", null, "Editar"))), _react["default"].createElement("table", null, _react["default"].createElement("thead", null, _react["default"].createElement("tr", {
         className: "header"
-      }, _react["default"].createElement("th", null, "Divisa"), _react["default"].createElement("th", null, "Valor en MXN"), this.state.editable ? _react["default"].createElement("th", {
+      }, _react["default"].createElement("th", null, "Divisa"), _react["default"].createElement("th", null, "Valor en MXN"), _react["default"].createElement("th", {
         className: "delete"
-      }) : null)), this.props.currencies.map(function (c) {
+      }))), this.props.rates.map(function (c) {
         return _react["default"].createElement("tbody", {
           key: c
         }, _react["default"].createElement("tr", {
           className: "field"
-        }, _react["default"].createElement("td", null, c[0]), _react["default"].createElement("td", null, c[1]), _this2.state.editable ? _react["default"].createElement("td", {
+        }, _react["default"].createElement("td", null, "".concat(_supportedSymbols.supportedSymbols[c[0]], " (").concat(c[0], ")")), _react["default"].createElement("td", null, c[1]), _this2.state.editable ? _react["default"].createElement("td", {
           className: "delete"
-        }, "Eliminar") : null));
+        }, "Eliminar") : _react["default"].createElement("td", null)));
       }))));
     }
   }]);
@@ -48861,10 +48926,12 @@ function (_Component) {
 
 exports["default"] = CurrencySelector;
 CurrencySelector.propTypes = {
-  currencies: _propTypes["default"].array
+  rates: _propTypes["default"].array,
+  currencies: _propTypes["default"].array,
+  onAddCurrency: _propTypes["default"].func
 };
 
-},{"prop-types":135,"react":145}],157:[function(require,module,exports){
+},{"../utils/supportedSymbols":163,"prop-types":135,"react":145}],157:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -49090,7 +49157,7 @@ Graph.propTypes = {
   loading: _propTypes["default"].bool
 };
 
-},{"c3":163,"d3":59,"prop-types":135,"react":145}],159:[function(require,module,exports){
+},{"c3":164,"d3":59,"prop-types":135,"react":145}],159:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -49151,8 +49218,11 @@ function (_Component) {
         rates: this.props.rates,
         loading: this.props.loading
       }), _react["default"].createElement(_CurrencySelector["default"], {
-        currencies: this.props.rates,
-        loading: this.props.loading
+        currencies: this.props.currencies,
+        rates: this.props.rates,
+        loading: this.props.loading,
+        onAddCurrency: this.props.onAddCurrency,
+        onDeleteCurrency: this.props.onDeleteCurrency
       })), _react["default"].createElement("div", {
         className: "load-box ".concat(this.props.loading ? 'active' : '')
       }, "Cargando"), _react["default"].createElement("div", {
@@ -49170,7 +49240,9 @@ Summary.propTypes = {
   currencies: _propTypes["default"].array,
   loading: _propTypes["default"].bool,
   errCode: _propTypes["default"].number,
-  error: _propTypes["default"].bool
+  error: _propTypes["default"].bool,
+  onAddCurrency: _propTypes["default"].func,
+  onDeleteCurrency: _propTypes["default"].func
 };
 
 var _default = (0, _withRates["default"])(Summary);
@@ -49241,14 +49313,18 @@ function withRates(WrappedComponent) {
         loading: false,
         rates: [],
         base: 'MXN',
+        deletedCurencies: [],
         currencies: ['USD', 'AUD', 'CAD', 'PLN', 'MXN', 'EUR']
       }; //Se ocupa memoize para reducir el numero de llamadas al server
 
       _this.memoizeData = (0, _memoizee["default"])(_this.getData, {
         promise: true,
-        maxAge: 100000
-      });
+        maxAge: 10000000
+      }); //binds
+
       _this.handleDateChange = _this.handleDateChange.bind(_assertThisInitialized(_this));
+      _this.handleAddCurrency = _this.handleAddCurrency.bind(_assertThisInitialized(_this));
+      _this.handleDeleteCurrency = _this.handleDeleteCurrency.bind(_assertThisInitialized(_this));
       return _this;
     }
 
@@ -49259,8 +49335,8 @@ function withRates(WrappedComponent) {
       }
     }, {
       key: "componentDidUpdate",
-      value: function componentDidUpdate(prevProps) {
-        if (prevProps.date !== this.props.date) {
+      value: function componentDidUpdate(prevProps, prevState) {
+        if ((prevProps.date !== this.props.date || JSON.stringify(prevState.currencies)) !== JSON.stringify(this.state.currencies)) {
           this.handleDateChange();
         }
       }
@@ -49271,15 +49347,35 @@ function withRates(WrappedComponent) {
 
         this.setState({
           loading: true
-        });
-        this.memoizeData(this.props.date).then(function (data) {
+        }); /// se manda la url para que la funcion se vuelva a ejecutar si la url es distinta
+
+        this.memoizeData(this.makeUrl(this.props.date, this.state.currencies)).then(function (data) {
           _this2.setState(data);
         });
       }
     }, {
+      key: "handleAddCurrency",
+      value: function handleAddCurrency(currency) {
+        var nextCurrencies = [].concat(_toConsumableArray(this.state.currencies), [currency]);
+        this.setState({
+          currencies: nextCurrencies,
+          deletedCurencies: []
+        });
+      }
+    }, {
+      key: "handleDeleteCurrency",
+      value: function handleDeleteCurrency(currency) {
+        var nextCurrencies = this.state.currencies.filter(function (c) {
+          return c !== currency;
+        });
+        this.setState({
+          currencies: nextCurrencies,
+          deletedCurencies: [currency]
+        });
+      }
+    }, {
       key: "getData",
-      value: function getData(date) {
-        var url = this.makeUrl(date, this.state.currencies);
+      value: function getData(url) {
         return _axios["default"].get(url).then(function (_ref) {
           var data = _ref.data;
 
@@ -49330,6 +49426,8 @@ function withRates(WrappedComponent) {
         return _react["default"].createElement(WrappedComponent, {
           loading: this.state.loading,
           currencies: this.state.currencies,
+          onDeleteCurrency: this.handleDeleteCurrency,
+          onAddCurrency: this.handleAddCurrency,
           base: this.state.base,
           error: this.state.error,
           errCode: this.state.errCode,
@@ -49374,6 +49472,185 @@ var API_KEY = 'dcb6e09de1bbe8ab8c1362caeff468e2';
 exports.API_KEY = API_KEY;
 
 },{}],163:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.supportedSymbols = void 0;
+var supportedSymbols = {
+  AED: 'United Arab Emirates Dirham',
+  AFN: 'Afghan Afghani',
+  ALL: 'Albanian Lek',
+  AMD: 'Armenian Dram',
+  ANG: 'Netherlands Antillean Guilder',
+  AOA: 'Angolan Kwanza',
+  ARS: 'Argentine Peso',
+  AUD: 'Australian Dollar',
+  AWG: 'Aruban Florin',
+  AZN: 'Azerbaijani Manat',
+  BAM: 'Bosnia-Herzegovina Convertible Mark',
+  BBD: 'Barbadian Dollar',
+  BDT: 'Bangladeshi Taka',
+  BGN: 'Bulgarian Lev',
+  BHD: 'Bahraini Dinar',
+  BIF: 'Burundian Franc',
+  BMD: 'Bermudan Dollar',
+  BND: 'Brunei Dollar',
+  BOB: 'Bolivian Boliviano',
+  BRL: 'Brazilian Real',
+  BSD: 'Bahamian Dollar',
+  BTC: 'Bitcoin',
+  BTN: 'Bhutanese Ngultrum',
+  BWP: 'Botswanan Pula',
+  BYN: 'New Belarusian Ruble',
+  BYR: 'Belarusian Ruble',
+  BZD: 'Belize Dollar',
+  CAD: 'Canadian Dollar',
+  CDF: 'Congolese Franc',
+  CHF: 'Swiss Franc',
+  CLF: 'Chilean Unit of Account (UF)',
+  CLP: 'Chilean Peso',
+  CNY: 'Chinese Yuan',
+  COP: 'Colombian Peso',
+  CRC: "Costa Rican Col\xF3n",
+  CUC: 'Cuban Convertible Peso',
+  CUP: 'Cuban Peso',
+  CVE: 'Cape Verdean Escudo',
+  CZK: 'Czech Republic Koruna',
+  DJF: 'Djiboutian Franc',
+  DKK: 'Danish Krone',
+  DOP: 'Dominican Peso',
+  DZD: 'Algerian Dinar',
+  EGP: 'Egyptian Pound',
+  ERN: 'Eritrean Nakfa',
+  ETB: 'Ethiopian Birr',
+  EUR: 'Euro',
+  FJD: 'Fijian Dollar',
+  FKP: 'Falkland Islands Pound',
+  GBP: 'British Pound Sterling',
+  GEL: 'Georgian Lari',
+  GGP: 'Guernsey Pound',
+  GHS: 'Ghanaian Cedi',
+  GIP: 'Gibraltar Pound',
+  GMD: 'Gambian Dalasi',
+  GNF: 'Guinean Franc',
+  GTQ: 'Guatemalan Quetzal',
+  GYD: 'Guyanaese Dollar',
+  HKD: 'Hong Kong Dollar',
+  HNL: 'Honduran Lempira',
+  HRK: 'Croatian Kuna',
+  HTG: 'Haitian Gourde',
+  HUF: 'Hungarian Forint',
+  IDR: 'Indonesian Rupiah',
+  ILS: 'Israeli New Sheqel',
+  IMP: 'Manx pound',
+  INR: 'Indian Rupee',
+  IQD: 'Iraqi Dinar',
+  IRR: 'Iranian Rial',
+  ISK: "Icelandic Kr\xF3na",
+  JEP: 'Jersey Pound',
+  JMD: 'Jamaican Dollar',
+  JOD: 'Jordanian Dinar',
+  JPY: 'Japanese Yen',
+  KES: 'Kenyan Shilling',
+  KGS: 'Kyrgystani Som',
+  KHR: 'Cambodian Riel',
+  KMF: 'Comorian Franc',
+  KPW: 'North Korean Won',
+  KRW: 'South Korean Won',
+  KWD: 'Kuwaiti Dinar',
+  KYD: 'Cayman Islands Dollar',
+  KZT: 'Kazakhstani Tenge',
+  LAK: 'Laotian Kip',
+  LBP: 'Lebanese Pound',
+  LKR: 'Sri Lankan Rupee',
+  LRD: 'Liberian Dollar',
+  LSL: 'Lesotho Loti',
+  LTL: 'Lithuanian Litas',
+  LVL: 'Latvian Lats',
+  LYD: 'Libyan Dinar',
+  MAD: 'Moroccan Dirham',
+  MDL: 'Moldovan Leu',
+  MGA: 'Malagasy Ariary',
+  MKD: 'Macedonian Denar',
+  MMK: 'Myanma Kyat',
+  MNT: 'Mongolian Tugrik',
+  MOP: 'Macanese Pataca',
+  MRO: 'Mauritanian Ouguiya',
+  MUR: 'Mauritian Rupee',
+  MVR: 'Maldivian Rufiyaa',
+  MWK: 'Malawian Kwacha',
+  MXN: 'Mexican Peso',
+  MYR: 'Malaysian Ringgit',
+  MZN: 'Mozambican Metical',
+  NAD: 'Namibian Dollar',
+  NGN: 'Nigerian Naira',
+  NIO: "Nicaraguan C\xF3rdoba",
+  NOK: 'Norwegian Krone',
+  NPR: 'Nepalese Rupee',
+  NZD: 'New Zealand Dollar',
+  OMR: 'Omani Rial',
+  PAB: 'Panamanian Balboa',
+  PEN: 'Peruvian Nuevo Sol',
+  PGK: 'Papua New Guinean Kina',
+  PHP: 'Philippine Peso',
+  PKR: 'Pakistani Rupee',
+  PLN: 'Polish Zloty',
+  PYG: 'Paraguayan Guarani',
+  QAR: 'Qatari Rial',
+  RON: 'Romanian Leu',
+  RSD: 'Serbian Dinar',
+  RUB: 'Russian Ruble',
+  RWF: 'Rwandan Franc',
+  SAR: 'Saudi Riyal',
+  SBD: 'Solomon Islands Dollar',
+  SCR: 'Seychellois Rupee',
+  SDG: 'Sudanese Pound',
+  SEK: 'Swedish Krona',
+  SGD: 'Singapore Dollar',
+  SHP: 'Saint Helena Pound',
+  SLL: 'Sierra Leonean Leone',
+  SOS: 'Somali Shilling',
+  SRD: 'Surinamese Dollar',
+  STD: "S\xE3o Tom\xE9 and Pr\xEDncipe Dobra",
+  SVC: "Salvadoran Col\xF3n",
+  SYP: 'Syrian Pound',
+  SZL: 'Swazi Lilangeni',
+  THB: 'Thai Baht',
+  TJS: 'Tajikistani Somoni',
+  TMT: 'Turkmenistani Manat',
+  TND: 'Tunisian Dinar',
+  TOP: "Tongan Pa\u02BBanga",
+  TRY: 'Turkish Lira',
+  TTD: 'Trinidad and Tobago Dollar',
+  TWD: 'New Taiwan Dollar',
+  TZS: 'Tanzanian Shilling',
+  UAH: 'Ukrainian Hryvnia',
+  UGX: 'Ugandan Shilling',
+  USD: 'United States Dollar',
+  UYU: 'Uruguayan Peso',
+  UZS: 'Uzbekistan Som',
+  VEF: "Venezuelan Bol\xEDvar Fuerte",
+  VND: 'Vietnamese Dong',
+  VUV: 'Vanuatu Vatu',
+  WST: 'Samoan Tala',
+  XAF: 'CFA Franc BEAC',
+  XAG: 'Silver (troy ounce)',
+  XAU: 'Gold (troy ounce)',
+  XCD: 'East Caribbean Dollar',
+  XDR: 'Special Drawing Rights',
+  XOF: 'CFA Franc BCEAO',
+  XPF: 'CFP Franc',
+  YER: 'Yemeni Rial',
+  ZAR: 'South African Rand',
+  ZMK: 'Zambian Kwacha (pre-2013)',
+  ZMW: 'Zambian Kwacha',
+  ZWL: 'Zimbabwean Dollar'
+};
+exports.supportedSymbols = supportedSymbols;
+
+},{}],164:[function(require,module,exports){
 "use strict";
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
