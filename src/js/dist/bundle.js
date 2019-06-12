@@ -48832,11 +48832,15 @@ function (_Component) {
       }, _react["default"].createElement("div", {
         className: "col s1"
       }, _react["default"].createElement("div", {
-        className: "add_currency"
+        className: "table-nav"
+      }, _react["default"].createElement("div", {
+        className: "add-currency"
       }, _react["default"].createElement("h4", null, "Agregar nueva Divisa"), _react["default"].createElement("input", {
         type: "text",
         placeholder: "USD"
-      }), _react["default"].createElement("button", null, "+")), _react["default"].createElement("table", null, _react["default"].createElement("thead", null, _react["default"].createElement("tr", {
+      }), _react["default"].createElement("button", null, "+")), _react["default"].createElement("div", {
+        className: "edit"
+      }, _react["default"].createElement("button", null, "Editar"))), _react["default"].createElement("table", null, _react["default"].createElement("thead", null, _react["default"].createElement("tr", {
         className: "header"
       }, _react["default"].createElement("th", null, "Divisa"), _react["default"].createElement("th", null, "Valor en MXN"), this.state.editable ? _react["default"].createElement("th", {
         className: "delete"
@@ -48968,8 +48972,6 @@ exports["default"] = void 0;
 
 var _react = _interopRequireWildcard(require("react"));
 
-var _withRates = _interopRequireDefault(require("./hocs/withRates.js"));
-
 var _propTypes = _interopRequireDefault(require("prop-types"));
 
 var _c = _interopRequireDefault(require("c3"));
@@ -49088,7 +49090,7 @@ Graph.propTypes = {
   loading: _propTypes["default"].bool
 };
 
-},{"./hocs/withRates.js":160,"c3":163,"d3":59,"prop-types":135,"react":145}],159:[function(require,module,exports){
+},{"c3":163,"d3":59,"prop-types":135,"react":145}],159:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -49149,7 +49151,8 @@ function (_Component) {
         rates: this.props.rates,
         loading: this.props.loading
       }), _react["default"].createElement(_CurrencySelector["default"], {
-        currencies: this.props.rates
+        currencies: this.props.rates,
+        loading: this.props.loading
       })), _react["default"].createElement("div", {
         className: "load-box ".concat(this.props.loading ? 'active' : '')
       }, "Cargando"), _react["default"].createElement("div", {

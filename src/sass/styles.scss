@@ -111,7 +111,31 @@ td.delete{
   }
 }
 
-.add_currency{
+
+.table-nav {
+  display: flex;
+  justify-content: space-between;
+  .edit{
+    button{
+      border: none;
+      color: $primary-color;
+      background-color: white;
+      font-size: 14px;
+      cursor: pointer;
+      &:hover{
+        color: lighten($primary-color, 20%);
+      }
+      &.editable{
+        color: $error-color;
+        &:hover{
+          color: lighten($error-color, 20%);
+        }
+      }
+    }
+  }
+}
+
+.add-currency{
   display: flex;
   align-items: center;
   margin-bottom: 24px;

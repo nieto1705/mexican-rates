@@ -12,10 +12,15 @@ export default class CurrencySelector extends Component {
     return (
       <div className="row">
         <div className="col s1">
-          <div className="add_currency">
-            <h4>Agregar nueva Divisa</h4>
-            <input type="text" placeholder="USD" />
-            <button>+</button>
+          <div className="table-nav">
+            <div className="add-currency">
+              <h4>Agregar nueva Divisa</h4>
+              <input type="text" placeholder="USD" />
+              <button>+</button>
+            </div>
+            <div className="edit">
+              <button>Editar</button>
+            </div>
           </div>
           <table>
             <thead>

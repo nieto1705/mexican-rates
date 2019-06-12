@@ -2207,20 +2207,36 @@ td.delete {
   td.delete:hover {
     background-color: #f14f23; }
 
-.add_currency {
+.table-nav {
+  display: flex;
+  justify-content: space-between; }
+  .table-nav .edit button {
+    border: none;
+    color: #1890ff;
+    background-color: white;
+    font-size: 14px;
+    cursor: pointer; }
+    .table-nav .edit button:hover {
+      color: #7ec1ff; }
+    .table-nav .edit button.editable {
+      color: #d4380d; }
+      .table-nav .edit button.editable:hover {
+        color: #f47653; }
+
+.add-currency {
   display: flex;
   align-items: center;
   margin-bottom: 24px; }
-  .add_currency h4 {
+  .add-currency h4 {
     margin: 0 6px 0 0;
     font-size: 14px; }
-  .add_currency input {
+  .add-currency input {
     border-radius: 5px 0 0 5px;
     -webkit-border-radius: 5px 0 0 5px;
     -moz-border-radius: 5px 0 0 5px;
     -ms-border-radius: 5px 0 0 5px;
     -o-border-radius: 5px 0 0 5px; }
-  .add_currency button {
+  .add-currency button {
     background-color: #1890ff;
     color: white;
     border: 1px solid #e8e8e8;
@@ -2232,7 +2248,7 @@ td.delete {
     -moz-border-radius: 0 5px 5px 0;
     -ms-border-radius: 0 5px 5px 0;
     -o-border-radius: 0 5px 5px 0; }
-    .add_currency button:hover {
+    .add-currency button:hover {
       cursor: pointer;
       background-color: #4ba9ff; }
 
