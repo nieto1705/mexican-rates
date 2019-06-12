@@ -48981,11 +48981,15 @@ function (_Component) {
     value: function render() {
       var _this2 = this;
 
-      return _react["default"].createElement("div", {
+      return _react["default"].createElement(_react["default"].Fragment, null, _react["default"].createElement("div", {
         ref: function ref(_ref) {
           return _this2.chartRef = _ref;
         }
-      });
+      }), _react["default"].createElement("div", {
+        className: "load-box ".concat(this.props.loading ? 'active' : '')
+      }, "Cargando"), _react["default"].createElement("div", {
+        className: "error-box ".concat(this.props.error ? 'active' : '')
+      }, "No se pudo cargar la informaci\xF3n de ese dia", ' ', this.props.errCode ? _react["default"].createElement("b", null, ",Codigo de error: ", this.props.errCode) : null));
     }
   }]);
 
@@ -48999,6 +49003,7 @@ Graph.propTypes = {
   base: _propTypes["default"].string,
   rates: _propTypes["default"].array,
   loading: _propTypes["default"].bool,
+  errCode: _propTypes["default"].number,
   error: _propTypes["default"].bool
 };
 
@@ -49070,7 +49075,7 @@ function withRates(WrappedComponent) {
 
       _this.memoizeData = (0, _memoizee["default"])(_this.getData, {
         promise: true,
-        maxAge: 60000
+        maxAge: 100000
       });
       _this.handleDateChange = _this.handleDateChange.bind(_assertThisInitialized(_this));
       return _this;
@@ -49107,25 +49112,37 @@ function withRates(WrappedComponent) {
         var url = this.makeUrl(date, currencies);
         return _axios["default"].get(url).then(function (_ref) {
           var data = _ref.data;
-          // como el api free de fixer.io no permite establecer la moneda
-          // Se hace una conversion cruzada
-          var excRate = 1 / data.rates.MXN;
-          return {
-            rates: Object.keys(data.rates).reduce(function (arr, key) {
-              if (key !== 'MXN') {
-                var currency = 1 / data.rates[key] / excRate;
-                return [].concat(_toConsumableArray(arr), [[key, parseFloat(currency).toFixed(2)]]);
-              }
 
-              return arr;
-            }, []),
-            error: false,
-            mxnRate: data.rates.MXN
+          if (data.success) {
+            // como el api free de fixer.io no permite establecer la moneda
+            // Se hace una conversion cruzada
+            var excRate = 1 / data.rates.MXN;
+            return {
+              rates: Object.keys(data.rates).reduce(function (arr, key) {
+                if (key !== 'MXN') {
+                  var currency = 1 / data.rates[key] / excRate;
+                  return [].concat(_toConsumableArray(arr), [[key, parseFloat(currency).toFixed(2)]]);
+                }
+
+                return arr;
+              }, []),
+              error: false,
+              loading: false,
+              mxnRate: data.rates.MXN
+            };
+          }
+
+          return {
+            error: true,
+            errCode: data.error.code,
+            loading: false,
+            rates: []
           };
         })["catch"](function () {
           return {
             rates: [],
-            error: true
+            error: true,
+            loading: false
           };
         });
       }
@@ -49144,6 +49161,7 @@ function withRates(WrappedComponent) {
           loading: this.state.loading,
           base: this.state.base,
           error: this.state.error,
+          errCode: this.state.errCode,
           rates: this.state.rates
         });
       }

@@ -49,7 +49,16 @@ class Graph extends Component {
     });
   }
   render() {
-    return <div ref={ref => (this.chartRef = ref)} />;
+    return (
+      <React.Fragment>
+        <div ref={ref => (this.chartRef = ref)} />
+        <div className={`load-box ${this.props.loading ? 'active' : ''}`}>Cargando</div>
+        <div className={`error-box ${this.props.error ? 'active' : ''}`}>
+          No se pudo cargar la información de ese dia{' '}
+          {this.props.errCode ? <b>,Codigo de error: {this.props.errCode}</b> : null}
+        </div>
+      </React.Fragment>
+    );
   }
 }
 
@@ -59,5 +68,6 @@ Graph.propTypes = {
   base: PropTypes.string,
   rates: PropTypes.array,
   loading: PropTypes.bool,
+  errCode: PropTypes.number,
   error: PropTypes.bool
 };

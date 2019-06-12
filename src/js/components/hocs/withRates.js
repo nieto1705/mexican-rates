@@ -16,7 +16,7 @@ function withRates(WrappedComponent) {
       //Se ocupa memoize para reducir el numero de llamadas al server
       this.memoizeData = memoize(this.getData, {
         promise: true,
-        maxAge: 60000
+        maxAge: 100000
       });
       this.handleDateChange = this.handleDateChange.bind(this);
     }
@@ -40,25 +40,35 @@ function withRates(WrappedComponent) {
       return axios
         .get(url)
         .then(({ data }) => {
-          // como el api free de fixer.io no permite establecer la moneda
-          // Se hace una conversion cruzada
-          const excRate = 1 / data.rates.MXN;
+          if (data.success) {
+            // como el api free de fixer.io no permite establecer la moneda
+            // Se hace una conversion cruzada
+            const excRate = 1 / data.rates.MXN;
+            return {
+              rates: Object.keys(data.rates).reduce((arr, key) => {
+                if (key !== 'MXN') {
+                  const currency = 1 / data.rates[key] / excRate;
+                  return [...arr, [key, parseFloat(currency).toFixed(2)]];
+                }
+                return arr;
+              }, []),
+              error: false,
+              loading: false,
+              mxnRate: data.rates.MXN
+            };
+          }
           return {
-            rates: Object.keys(data.rates).reduce((arr, key) => {
-              if (key !== 'MXN') {
-                const currency = 1 / data.rates[key] / excRate;
-                return [...arr, [key, parseFloat(currency).toFixed(2)]];
-              }
-              return arr;
-            }, []),
-            error: false,
-            mxnRate: data.rates.MXN
+            error: true,
+            errCode: data.error.code,
+            loading: false,
+            rates: []
           };
         })
         .catch(() => {
           return {
             rates: [],
-            error: true
+            error: true,
+            loading: false
           };
         });
     }
@@ -75,6 +85,7 @@ function withRates(WrappedComponent) {
           loading={this.state.loading}
           base={this.state.base}
           error={this.state.error}
+          errCode={this.state.errCode}
           rates={this.state.rates}
         />
       );
