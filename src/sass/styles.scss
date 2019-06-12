@@ -57,10 +57,10 @@ $line-gray:#e8e8e8;
 
 .load-box{
   display: none;
-  margin-top: 24px;
+  position: absolute;
+  margin-top: 6px;
   &.active{
     display: flex;
-    justify-content: flex-end;
     align-items: center;
   }
 &:before{
