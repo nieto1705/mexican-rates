@@ -29,11 +29,8 @@ function withRates(WrappedComponent) {
     componentDidMount() {
       this.handleDateChange();
     }
-    componentDidUpdate(prevProps, prevState) {
-      if (
-        (prevProps.date !== this.props.date || JSON.stringify(prevState.currencies)) !==
-        JSON.stringify(this.state.currencies)
-      ) {
+    componentDidUpdate(prevProps) {
+      if (prevProps.date !== this.props.date) {
         this.handleDateChange();
       }
     }
@@ -47,11 +44,19 @@ function withRates(WrappedComponent) {
     }
     handleAddCurrency(currency) {
       const nextCurrencies = [...this.state.currencies, currency];
-      this.setState({ currencies: nextCurrencies, deletedCurencies: [] });
+      this.setState({ loading: true });
+      this.memoizeData(this.makeUrl(this.props.date, nextCurrencies)).then(data => {
+        this.setState({ ...data, currencies: nextCurrencies, deletedCurrencies: [] });
+      });
     }
     handleDeleteCurrency(currency) {
       const nextCurrencies = this.state.currencies.filter(c => c !== currency);
-      this.setState({ currencies: nextCurrencies, deletedCurencies: [currency] });
+      const nextRates = this.state.rates.filter(c => c[0] !== currency);
+      this.setState({
+        currencies: nextCurrencies,
+        rates: nextRates,
+        deletedCurrencies: [currency]
+      });
     }
     getData(url) {
       return axios
@@ -106,6 +111,7 @@ function withRates(WrappedComponent) {
           base={this.state.base}
           error={this.state.error}
           errCode={this.state.errCode}
+          deletedCurrencies={this.state.deletedCurrencies}
           rates={this.state.rates}
         />
       );

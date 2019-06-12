@@ -9,7 +9,12 @@ class Summary extends Component {
     return (
       <React.Fragment>
         <div className="summary-container">
-          <Graph base={this.props.base} rates={this.props.rates} loading={this.props.loading} />
+          <Graph
+            base={this.props.base}
+            rates={this.props.rates}
+            loading={this.props.loading}
+            deletedCurrencies={this.props.deletedCurrencies}
+          />
           <CurrencySelector
             currencies={this.props.currencies}
             rates={this.props.rates}
@@ -36,7 +41,8 @@ Summary.propTypes = {
   errCode: PropTypes.number,
   error: PropTypes.bool,
   onAddCurrency: PropTypes.func,
-  onDeleteCurrency: PropTypes.func
+  onDeleteCurrency: PropTypes.func,
+  deletedCurrencies: PropTypes.array
 };
 
 export default withRates(Summary);

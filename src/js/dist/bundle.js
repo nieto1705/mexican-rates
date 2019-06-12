@@ -48829,6 +48829,7 @@ function (_Component) {
 
     _this.handleInputChange = _this.handleInputChange.bind(_assertThisInitialized(_this));
     _this.handleSubmit = _this.handleSubmit.bind(_assertThisInitialized(_this));
+    _this.handleEdit = _this.handleEdit.bind(_assertThisInitialized(_this));
     return _this;
   }
 
@@ -48877,6 +48878,13 @@ function (_Component) {
       }
     }
   }, {
+    key: "handleEdit",
+    value: function handleEdit() {
+      this.setState({
+        editable: !this.state.editable
+      });
+    }
+  }, {
     key: "render",
     value: function render() {
       var _this2 = this;
@@ -48905,7 +48913,10 @@ function (_Component) {
         className: "error-helper ".concat(inputStatus.success ? '' : 'visible')
       }, inputStatus.msg)), _react["default"].createElement("div", {
         className: "edit"
-      }, _react["default"].createElement("button", null, "Editar"))), _react["default"].createElement("table", null, _react["default"].createElement("thead", null, _react["default"].createElement("tr", {
+      }, _react["default"].createElement("button", {
+        className: this.state.editable ? 'editable' : '',
+        onClick: this.handleEdit
+      }, this.state.editable ? 'Cancelar' : 'Editar'))), _react["default"].createElement("table", null, _react["default"].createElement("thead", null, _react["default"].createElement("tr", {
         className: "header"
       }, _react["default"].createElement("th", null, "Divisa"), _react["default"].createElement("th", null, "Valor en MXN"), _react["default"].createElement("th", {
         className: "delete"
@@ -48915,6 +48926,9 @@ function (_Component) {
         }, _react["default"].createElement("tr", {
           className: "field"
         }, _react["default"].createElement("td", null, "".concat(_supportedSymbols.supportedSymbols[c[0]], " (").concat(c[0], ")")), _react["default"].createElement("td", null, c[1]), _this2.state.editable ? _react["default"].createElement("td", {
+          onClick: function onClick() {
+            return _this2.props.onDeleteCurrency(c[0]);
+          },
           className: "delete"
         }, "Eliminar") : _react["default"].createElement("td", null)));
       }))));
@@ -48928,7 +48942,8 @@ exports["default"] = CurrencySelector;
 CurrencySelector.propTypes = {
   rates: _propTypes["default"].array,
   currencies: _propTypes["default"].array,
-  onAddCurrency: _propTypes["default"].func
+  onAddCurrency: _propTypes["default"].func,
+  onDeleteCurrency: _propTypes["default"].func
 };
 
 },{"../utils/supportedSymbols":163,"prop-types":135,"react":145}],157:[function(require,module,exports){
@@ -49108,7 +49123,8 @@ function (_Component) {
         } else {
           this.chart.load({
             columns: [['x', this.props.base]].concat(_toConsumableArray(this.props.rates)),
-            type: 'bar'
+            type: 'bar',
+            unload: this.props.deletedCurrencies
           });
         }
       }
@@ -49154,7 +49170,8 @@ exports["default"] = Graph;
 Graph.propTypes = {
   base: _propTypes["default"].string,
   rates: _propTypes["default"].array,
-  loading: _propTypes["default"].bool
+  loading: _propTypes["default"].bool,
+  deletedCurrencies: _propTypes["default"].array
 };
 
 },{"c3":164,"d3":59,"prop-types":135,"react":145}],159:[function(require,module,exports){
@@ -49216,7 +49233,8 @@ function (_Component) {
       }, _react["default"].createElement(_Graph["default"], {
         base: this.props.base,
         rates: this.props.rates,
-        loading: this.props.loading
+        loading: this.props.loading,
+        deletedCurrencies: this.props.deletedCurrencies
       }), _react["default"].createElement(_CurrencySelector["default"], {
         currencies: this.props.currencies,
         rates: this.props.rates,
@@ -49242,7 +49260,8 @@ Summary.propTypes = {
   errCode: _propTypes["default"].number,
   error: _propTypes["default"].bool,
   onAddCurrency: _propTypes["default"].func,
-  onDeleteCurrency: _propTypes["default"].func
+  onDeleteCurrency: _propTypes["default"].func,
+  deletedCurrencies: _propTypes["default"].array
 };
 
 var _default = (0, _withRates["default"])(Summary);
@@ -49272,6 +49291,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "d
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = Object.defineProperty && Object.getOwnPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : {}; if (desc.get || desc.set) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj["default"] = obj; return newObj; } }
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
@@ -49335,8 +49358,8 @@ function withRates(WrappedComponent) {
       }
     }, {
       key: "componentDidUpdate",
-      value: function componentDidUpdate(prevProps, prevState) {
-        if ((prevProps.date !== this.props.date || JSON.stringify(prevState.currencies)) !== JSON.stringify(this.state.currencies)) {
+      value: function componentDidUpdate(prevProps) {
+        if (prevProps.date !== this.props.date) {
           this.handleDateChange();
         }
       }
@@ -49356,10 +49379,17 @@ function withRates(WrappedComponent) {
     }, {
       key: "handleAddCurrency",
       value: function handleAddCurrency(currency) {
+        var _this3 = this;
+
         var nextCurrencies = [].concat(_toConsumableArray(this.state.currencies), [currency]);
         this.setState({
-          currencies: nextCurrencies,
-          deletedCurencies: []
+          loading: true
+        });
+        this.memoizeData(this.makeUrl(this.props.date, nextCurrencies)).then(function (data) {
+          _this3.setState(_objectSpread({}, data, {
+            currencies: nextCurrencies,
+            deletedCurrencies: []
+          }));
         });
       }
     }, {
@@ -49368,9 +49398,13 @@ function withRates(WrappedComponent) {
         var nextCurrencies = this.state.currencies.filter(function (c) {
           return c !== currency;
         });
+        var nextRates = this.state.rates.filter(function (c) {
+          return c[0] !== currency;
+        });
         this.setState({
           currencies: nextCurrencies,
-          deletedCurencies: [currency]
+          rates: nextRates,
+          deletedCurrencies: [currency]
         });
       }
     }, {
@@ -49431,6 +49465,7 @@ function withRates(WrappedComponent) {
           base: this.state.base,
           error: this.state.error,
           errCode: this.state.errCode,
+          deletedCurrencies: this.state.deletedCurrencies,
           rates: this.state.rates
         });
       }

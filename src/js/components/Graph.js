@@ -23,7 +23,8 @@ export default class Graph extends Component {
       } else {
         this.chart.load({
           columns: [['x', this.props.base], ...this.props.rates],
-          type: 'bar'
+          type: 'bar',
+          unload: this.props.deletedCurrencies
         });
       }
     }
@@ -55,5 +56,6 @@ export default class Graph extends Component {
 Graph.propTypes = {
   base: PropTypes.string,
   rates: PropTypes.array,
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
+  deletedCurrencies: PropTypes.array
 };

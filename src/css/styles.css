@@ -2424,6 +2424,9 @@ input {
   input:focus {
     border: 1px solid #1890ff; }
 
+button {
+  outline: none; }
+
 .load-box {
   display: none;
   position: absolute;

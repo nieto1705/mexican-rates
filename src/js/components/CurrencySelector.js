@@ -16,6 +16,7 @@ export default class CurrencySelector extends Component {
     ///binds
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleEdit = this.handleEdit.bind(this);
   }
   handleInputChange(e) {
     this.setState({ newCurrency: e.target.value });
@@ -54,6 +55,9 @@ export default class CurrencySelector extends Component {
       this.props.onAddCurrency(newCurrency);
     }
   }
+  handleEdit() {
+    this.setState({ editable: !this.state.editable });
+  }
   render() {
     const { inputStatus } = this.state;
     return (
@@ -78,7 +82,9 @@ export default class CurrencySelector extends Component {
               </span>
             </div>
             <div className="edit">
-              <button>Editar</button>
+              <button className={this.state.editable ? 'editable' : ''} onClick={this.handleEdit}>
+                {this.state.editable ? 'Cancelar' : 'Editar'}
+              </button>
             </div>
           </div>
           <table>
@@ -94,7 +100,13 @@ export default class CurrencySelector extends Component {
                 <tr className="field">
                   <td>{`${supportedSymbols[c[0]]} (${c[0]})`}</td>
                   <td>{c[1]}</td>
-                  {this.state.editable ? <td className="delete">Eliminar</td> : <td></td>}
+                  {this.state.editable ? (
+                    <td onClick={() => this.props.onDeleteCurrency(c[0])} className="delete">
+                      Eliminar
+                    </td>
+                  ) : (
+                    <td></td>
+                  )}
                 </tr>
               </tbody>
             ))}
@@ -108,5 +120,6 @@ export default class CurrencySelector extends Component {
 CurrencySelector.propTypes = {
   rates: PropTypes.array,
   currencies: PropTypes.array,
-  onAddCurrency: PropTypes.func
+  onAddCurrency: PropTypes.func,
+  onDeleteCurrency: PropTypes.func
 };
