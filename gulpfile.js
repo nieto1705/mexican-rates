@@ -116,24 +116,24 @@ function buildCss() {
     .pipe(gulp.dest(paths.html.buildDest));
 }
 
-/*function initBuildServer(done) {
+function initBuildServer(done) {
   server.init({
     server: {
       baseDir: 'build'
     }
   });
   done();
-}*/
+}
 
 exports.default = gulp.series(compileSass, makeDevBundle, initServer, watch);
 exports.build = gulp.series(clean, compileSass, buildCss, fonts, makeBuildBundle);
 
 //solo para probar el desempeño
-/*exports.buildAndTest = gulp.series(
+exports.buildAndTest = gulp.series(
   clean,
   compileSass,
   buildCss,
   fonts,
   makeBuildBundle,
   initBuildServer
-);*/
+);

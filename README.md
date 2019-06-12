@@ -16,6 +16,9 @@ Para compilar el proyecto para produccion
 
 `npm build`
 
+Servidor para probar el desempeño del build
+`gulp buildAndTest`
+
 Estructura de archivos
 =======================
 ```
