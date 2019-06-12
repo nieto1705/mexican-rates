@@ -35,20 +35,31 @@ Estructura de archivos
     │   └── Roboto-Regular.ttf
     ├── index.html
     ├── js
-    │   ├── App.js #React.js entry point
+    │   ├── App.js 
     │   ├── components
+    │   │   ├── CurrencySelector.js
     │   │   ├── DatePicker.js
     │   │   ├── Graph.js
     │   │   └── hocs
-    │   │       └── withRates.js
+    │   │   │    └── withRates.js
+    │   │   └── Summary.js
     │   ├── dist
     │   │   └── bundle.js # js compilado no editar
-    │   ├── index.js
+    │   ├── index.js    #browserify entry point
     │   ├── utils
-    │   │   └── constants.js
+    │   │   ├── constants.js
+    │   │   └── supportedSymbols.js
     │   └── vendor # librerias no commonjs
     │       └── c3.min.js
     └── sass
+        ├── components
+        │   ├── _buttons.scss
+        │   ├── _color-classes.scss
+        │   ├── _color-variables.scss
+        │   ├── forms
+        │   │   └── _input-fields.scss
+        │   ├── _global.scss
+        │   └── _variables.scss
         └── styles.scss
 
 ```
